@@ -33,8 +33,12 @@ public class AnimeService {
     public Anime save(Anime anime) {
         anime.setId(ThreadLocalRandom.current().nextLong(3, 1000000));
         animes.add(anime);
-
+        
         return anime;
+    }
+
+    public void delete(Long id) {
+        animes.remove(findById(id));
     }
 
 }
