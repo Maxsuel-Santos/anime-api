@@ -3,7 +3,7 @@ version: "3.8"
 services:
   postgres:
     image: postgres:15
-    container_name: postgreSQLAnime
+    container_name: postgres-anime
     restart: always
     environment:
       POSTGRES_USER: animesAPI
@@ -14,16 +14,17 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U animesAPI -d db_animes" ]
+      test: ["CMD-SHELL", "pg_isready -U animesAPI -d db_animes"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   app:
     build: .
-    container_name: animes-api
+    container_name: anime-api
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/db_animes
       SPRING_DATASOURCE_USERNAME: animesAPI
