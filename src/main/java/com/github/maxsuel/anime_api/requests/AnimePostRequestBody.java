@@ -8,3 +8,4 @@ public class AnimePostRequestBody {
     private String name;
 
 }
+
