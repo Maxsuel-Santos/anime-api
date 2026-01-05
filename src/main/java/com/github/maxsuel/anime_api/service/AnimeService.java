@@ -2,9 +2,7 @@ package com.github.maxsuel.anime_api.service;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.github.maxsuel.anime_api.domain.Anime;
 import com.github.maxsuel.anime_api.exceptions.BadRequestException;
