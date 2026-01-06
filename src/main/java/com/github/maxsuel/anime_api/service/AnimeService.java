@@ -11,6 +11,7 @@ import com.github.maxsuel.anime_api.repository.AnimeRepository;
 import com.github.maxsuel.anime_api.requests.AnimePostRequestBody;
 import com.github.maxsuel.anime_api.requests.AnimePutRequestBody;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -32,6 +33,7 @@ public class AnimeService {
                 .orElseThrow(() -> new BadRequestException("Anime not found."));
     }
 
+    @Transactional
     public Anime save(AnimePostRequestBody animePostRequestBody) {
         return animeRepository.save(AnimeMapper.INSTANCE.toAnime(animePostRequestBody));
     }
