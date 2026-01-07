@@ -2,6 +2,8 @@ package com.github.maxsuel.anime_api.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.github.maxsuel.anime_api.domain.Anime;
@@ -11,6 +13,7 @@ import com.github.maxsuel.anime_api.repository.AnimeRepository;
 import com.github.maxsuel.anime_api.requests.AnimePostRequestBody;
 import com.github.maxsuel.anime_api.requests.AnimePutRequestBody;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -19,12 +22,12 @@ public class AnimeService {
 
     private final AnimeRepository animeRepository;
 
-    public List<Anime> listAll() {
-        return animeRepository.findAll();
+    public Page<Anime> listAll(Pageable pageable) {
+        return animeRepository.findAll(pageable);
     }
 
-    public List<Anime> findByName(String name) {
-        return animeRepository.findByName(name);
+    public Page<Anime> findByName(String name, Pageable pageable) {
+        return animeRepository.findByName(name, pageable);
     }
 
     public Anime findByIdOrThrowBadRequestException(Long id) {
@@ -32,6 +35,7 @@ public class AnimeService {
                 .orElseThrow(() -> new BadRequestException("Anime not found."));
     }
 
+    @Transactional
     public Anime save(AnimePostRequestBody animePostRequestBody) {
         return animeRepository.save(AnimeMapper.INSTANCE.toAnime(animePostRequestBody));
     }
