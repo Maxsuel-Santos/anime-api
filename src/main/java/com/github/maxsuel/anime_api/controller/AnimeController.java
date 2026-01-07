@@ -3,6 +3,9 @@ package com.github.maxsuel.anime_api.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,9 +39,9 @@ public class AnimeController {
     private final AnimeService animeService;
 
     @GetMapping
-    public ResponseEntity<List<Anime>> list() {
+    public ResponseEntity<Page<Anime>> list(@ParameterObject Pageable pageable) {
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-        return ResponseEntity.ok(animeService.listAll());
+        return ResponseEntity.ok(animeService.listAll(pageable));
     }
 
     @GetMapping(path = "/{id}")
@@ -47,8 +50,8 @@ public class AnimeController {
     }
 
     @GetMapping(path = "/find")
-    public ResponseEntity<List<Anime>> findByName(@RequestParam String name) {
-        return ResponseEntity.ok(animeService.findByName(name));
+    public ResponseEntity<Page<Anime>> findByName(@RequestParam String name, Pageable pageable) {
+        return ResponseEntity.ok(animeService.findByName(name, pageable));
     }
 
     @PostMapping
