@@ -1,5 +1,10 @@
 package com.github.maxsuel.anime_api.client;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,10 +16,19 @@ import lombok.extern.slf4j.Slf4j;
 public class SpringClient {
     public static void main(String[] args) {
         ResponseEntity<Anime> entity = new RestTemplate().getForEntity("http://localhost:8080/animes/{id}", Anime.class, 2);
-        log.info("{}", entity);    
-        
+        log.info("{}", entity);
+
         Anime object = new RestTemplate().getForObject("http://localhost:8080/animes/{id}", Anime.class, 2);
-        log.info("{}", object);    
+        log.info("{}", object);
+
+        Anime[] animes = new RestTemplate().getForObject("http://localhost:8080/animes/all", Anime[].class, 2);
+        log.info("{}", Arrays.toString(animes));
+
+        ResponseEntity<List<Anime>> exchange = new RestTemplate().exchange("http://localhost:8080/animes/all",
+                HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+
+                });
+        log.info("{}", exchange.getBody());
     }
 
 }

@@ -2,6 +2,7 @@ package com.github.maxsuel.anime_api.service;
 
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,15 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AnimeService {
-
+    
     private final AnimeRepository animeRepository;
-
+    
     public Page<Anime> listAll(Pageable pageable) {
         return animeRepository.findAll(pageable);
+    }
+    
+    public List<Anime> listAllNonPageable() {
+        return animeRepository.findAll();
     }
 
     public Page<Anime> findByName(String name, Pageable pageable) {
@@ -50,5 +55,6 @@ public class AnimeService {
         anime.setId(savedAnime.getId());
         animeRepository.save(anime);
     }
+
 
 }
