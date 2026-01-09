@@ -1,6 +1,7 @@
 package com.github.maxsuel.anime_api.repository;
 
 import com.github.maxsuel.anime_api.domain.Anime;
+import com.github.maxsuel.anime_api.util.AnimeCreator;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -27,8 +28,8 @@ class AnimeRepositoryTest {
 
     @Test
     @DisplayName("Save persists anime when Successful")
-    void save_PersistAnime_WhenSuccessful() {
-        Anime animeToBeSaved = createAnime();
+    public void save_PersistAnime_WhenSuccessful() {
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime animeSaved = this.animeRepository.save(animeToBeSaved);
 
         Assertions.assertThat(animeSaved).isNotNull();
@@ -38,8 +39,8 @@ class AnimeRepositoryTest {
 
     @Test
     @DisplayName("Save updates anime when Successful")
-    void save_UpdatesAnime_WhenSuccessful() {
-        Anime animeToBeSaved = createAnime();
+    public void save_UpdatesAnime_WhenSuccessful() {
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime animeSaved = this.animeRepository.save(animeToBeSaved);
 
         animeSaved.setName("Overlord");
@@ -52,8 +53,8 @@ class AnimeRepositoryTest {
 
     @Test
     @DisplayName("Delete removes anime when Successful")
-    void delete_RemovesAnime_WhenSuccessful() {
-        Anime animeToBeSaved = createAnime();
+    public void delete_RemovesAnime_WhenSuccessful() {
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime animeSaved = this.animeRepository.save(animeToBeSaved);
 
         this.animeRepository.delete(animeSaved);
@@ -65,8 +66,8 @@ class AnimeRepositoryTest {
 
     @Test
     @DisplayName("Find By Name returns list of anime in page object when Successful")
-    void findByName_ReturnsListOfAnimeInPageObject_WhenSuccessful() {
-        Anime animeToBeSaved = createAnime();
+    public void findByName_ReturnsListOfAnimeInPageObject_WhenSuccessful() {
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         this.animeRepository.save(animeToBeSaved);
 
         String name = animeToBeSaved.getName();
@@ -78,8 +79,8 @@ class AnimeRepositoryTest {
 
     @Test
     @DisplayName("Save throw ConstraintViolationException when name is empty")
-    void save_ThrowConstraintViolationException_WhenNameIsEmpty() {
-        Anime animeToBeSaved = createAnime();
+    public void save_ThrowConstraintViolationException_WhenNameIsEmpty() {
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         animeToBeSaved.setName("");
 
         Assertions.assertThatThrownBy(() -> this.animeRepository.save(animeToBeSaved))
@@ -87,9 +88,4 @@ class AnimeRepositoryTest {
                 .withFailMessage("The anime name cannot be empty");
     }
 
-    private Anime createAnime() {
-        return Anime.builder()
-                .name("Hajime no Ippo")
-                .build();
-    }
 }
