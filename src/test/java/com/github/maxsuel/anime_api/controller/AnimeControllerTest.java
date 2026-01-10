@@ -15,13 +15,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 
 import com.github.maxsuel.anime_api.domain.Anime;
 import com.github.maxsuel.anime_api.requests.AnimePostRequestBody;
+import com.github.maxsuel.anime_api.requests.AnimePutRequestBody;
 import com.github.maxsuel.anime_api.service.AnimeService;
 import com.github.maxsuel.anime_api.util.AnimeCreator;
 import com.github.maxsuel.anime_api.util.AnimePostRequestBodyCreator;
+import com.github.maxsuel.anime_api.util.AnimePutRequestBodyCreator;
 import com.github.maxsuel.anime_api.util.DateUtil;
+
+import io.micrometer.core.ipc.http.HttpSender.Response;
 
 @ExtendWith(MockitoExtension.class)
 class AnimeControllerTest {
@@ -124,7 +129,21 @@ class AnimeControllerTest {
 
         Assertions.assertThat(anime).isNotNull();
         Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
-        
+
+    }
+
+    @Test
+    @DisplayName("replace updates anime when successful")
+    void replace_UpdatesAnime_WhenSuccessful() {
+        BDDMockito.doNothing().when(animeServiceMock).replace(ArgumentMatchers.any(AnimePutRequestBody.class));
+
+        Assertions.assertThatCode(() -> animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody()))
+                .doesNotThrowAnyException();
+
+        ResponseEntity<Void> entity = animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody());
+
+        Assertions.assertThat(entity).isNotNull();
+        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
 }
