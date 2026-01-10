@@ -13,10 +13,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.github.maxsuel.anime_api.domain.Anime;
+import com.github.maxsuel.anime_api.requests.AnimePostRequestBody;
 import com.github.maxsuel.anime_api.service.AnimeService;
 import com.github.maxsuel.anime_api.util.AnimeCreator;
+import com.github.maxsuel.anime_api.util.AnimePostRequestBodyCreator;
 import com.github.maxsuel.anime_api.util.DateUtil;
 
 @ExtendWith(MockitoExtension.class)
@@ -106,6 +110,21 @@ class AnimeControllerTest {
 
         Assertions.assertThat(animePage).isNotNull();
         Assertions.assertThat(animePage.toList()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("save returns anime when successful")
+    void save_ReturnsAnime_WhenSuccessful() {
+        Long expectedId = AnimeCreator.createValidAnime().getId();
+
+        BDDMockito.when(animeServiceMock.save(ArgumentMatchers.any(AnimePostRequestBody.class)))
+                .thenReturn(AnimeCreator.createValidAnime());
+
+        Anime anime = animeController.save(AnimePostRequestBodyCreator.createAnimePostRequestBody()).getBody();
+
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+        
     }
 
 }
