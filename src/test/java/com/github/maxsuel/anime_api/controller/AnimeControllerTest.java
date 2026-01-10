@@ -13,11 +13,20 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 
 import com.github.maxsuel.anime_api.domain.Anime;
+import com.github.maxsuel.anime_api.requests.AnimePostRequestBody;
+import com.github.maxsuel.anime_api.requests.AnimePutRequestBody;
 import com.github.maxsuel.anime_api.service.AnimeService;
 import com.github.maxsuel.anime_api.util.AnimeCreator;
+import com.github.maxsuel.anime_api.util.AnimePostRequestBodyCreator;
+import com.github.maxsuel.anime_api.util.AnimePutRequestBodyCreator;
 import com.github.maxsuel.anime_api.util.DateUtil;
+
+import io.micrometer.core.ipc.http.HttpSender.Response;
 
 @ExtendWith(MockitoExtension.class)
 class AnimeControllerTest {
@@ -78,7 +87,7 @@ class AnimeControllerTest {
         Anime anime = animeController.findById(1L).getBody();
 
         Assertions.assertThat(anime).isNotNull();
-        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId); 
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
     }
 
     @Test
@@ -89,11 +98,65 @@ class AnimeControllerTest {
         BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
                 .thenReturn(new PageImpl<>(List.of(AnimeCreator.createValidAnime())));
 
-         Page<Anime> animePage = animeController.findByName("anime", null).getBody();
-         Anime anime = animePage.toList().get(0);
+        Page<Anime> animePage = animeController.findByName("anime", null).getBody();
+        Anime anime = animePage.toList().get(0);
 
         Assertions.assertThat(anime).isNotNull();
-        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId); 
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
     }
 
+    @Test
+    @DisplayName("findByName returns an empty list of anime when no anime is found")
+    public void findByName_ReturnsEmptyListOfAnimes_WhenAnimeIsNotFound() {
+        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(Page.empty());
+
+        Page<Anime> animePage = animeController.findByName("anime", null).getBody();
+
+        Assertions.assertThat(animePage).isNotNull();
+        Assertions.assertThat(animePage.toList()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("save returns anime when successful")
+    void save_ReturnsAnime_WhenSuccessful() {
+        Long expectedId = AnimeCreator.createValidAnime().getId();
+
+        BDDMockito.when(animeServiceMock.save(ArgumentMatchers.any(AnimePostRequestBody.class)))
+                .thenReturn(AnimeCreator.createValidAnime());
+
+        Anime anime = animeController.save(AnimePostRequestBodyCreator.createAnimePostRequestBody()).getBody();
+
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+
+    }
+
+    @Test
+    @DisplayName("replace updates anime when successful")
+    void replace_UpdatesAnime_WhenSuccessful() {
+        BDDMockito.doNothing().when(animeServiceMock).replace(ArgumentMatchers.any(AnimePutRequestBody.class));
+
+        Assertions.assertThatCode(() -> animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody()))
+                .doesNotThrowAnyException();
+
+        ResponseEntity<Void> entity = animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody());
+
+        Assertions.assertThat(entity).isNotNull();
+        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    @Test
+    @DisplayName("delete removes anime when successful")
+    void delete_RemovesAnime_WhenSuccessful() {
+        BDDMockito.doNothing().when(animeServiceMock).delete(ArgumentMatchers.anyLong());
+
+        Assertions.assertThatCode(() -> animeController.delete(1L))
+                .doesNotThrowAnyException();
+
+        ResponseEntity<Void> entity = animeController.delete(1L);
+
+        Assertions.assertThat(entity).isNotNull();
+        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
 }
