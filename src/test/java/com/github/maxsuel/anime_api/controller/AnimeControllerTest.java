@@ -33,8 +33,9 @@ class AnimeControllerTest {
 
     @Test
     @DisplayName("List returns list of animes inside page object when successful")
-    void list_ReturnsListOfAnimesInsidePageObject_WhenSuccessful() {
+    public void list_ReturnsListOfAnimesInsidePageObject_WhenSuccessful() {
         PageImpl<Anime> animePage = new PageImpl<>(List.of(AnimeCreator.createValidAnime()));
+
         BDDMockito.when(animeServiceMock.listAll(ArgumentMatchers.any()))
                 .thenReturn(animePage);
 
@@ -50,8 +51,9 @@ class AnimeControllerTest {
 
     @Test
     @DisplayName("ListAll returns list of animes when successful")
-    void listAll_ReturnsListOfAnimes_WhenSuccessful() {
+    public void listAll_ReturnsListOfAnimes_WhenSuccessful() {
         List<Anime> expectedList = List.of(AnimeCreator.createValidAnime());
+
         BDDMockito.when(animeServiceMock.listAllNonPageable())
                 .thenReturn(expectedList);
 
@@ -63,5 +65,19 @@ class AnimeControllerTest {
                 .hasSize(1);
         Assertions.assertThat(animes.get(0).getName())
                 .isEqualTo(AnimeCreator.createValidAnime().getName());
+    }
+
+    @Test
+    @DisplayName("FindByID returns anime when successful")
+    public void findById_ReturnsAnimes_WhenSuccessful() {
+        Long expectedId = AnimeCreator.createValidAnime().getId();
+
+        BDDMockito.when(animeServiceMock.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
+                .thenReturn(AnimeCreator.createValidAnime());
+
+        Anime anime = animeController.findById(1L).getBody();
+
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId); 
     }
 }
