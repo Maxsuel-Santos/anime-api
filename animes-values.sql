@@ -1,4 +1,4 @@
--- Códios (auxiliar) SQL para inserir dados na tabela "animes" e resetar o contador de IDs. Esse projeto usa PostgreSQL, mas pode ser adaptado para outros SGBDs.
+-- Códios (auxiliares) SQL para inserir dados na tabela "animes" e resetar o contador de IDs. Esse projeto usa PostgreSQL, mas pode ser adaptado para outros SGBDs.
 
 -- ----------------------------------------------
 -- Resetar o contador de IDs da tabela "animes"
