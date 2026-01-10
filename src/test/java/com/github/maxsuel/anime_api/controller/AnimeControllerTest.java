@@ -78,7 +78,7 @@ class AnimeControllerTest {
         Anime anime = animeController.findById(1L).getBody();
 
         Assertions.assertThat(anime).isNotNull();
-        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId); 
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
     }
 
     @Test
@@ -89,11 +89,23 @@ class AnimeControllerTest {
         BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
                 .thenReturn(new PageImpl<>(List.of(AnimeCreator.createValidAnime())));
 
-         Page<Anime> animePage = animeController.findByName("anime", null).getBody();
-         Anime anime = animePage.toList().get(0);
+        Page<Anime> animePage = animeController.findByName("anime", null).getBody();
+        Anime anime = animePage.toList().get(0);
 
         Assertions.assertThat(anime).isNotNull();
-        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId); 
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
+
+    @Test
+    @DisplayName("findByName returns an empty list of anime when no anime is found")
+    public void findByName_ReturnsEmptyListOfAnimes_WhenAnimeIsNotFound() {
+        BDDMockito.when(animeServiceMock.findByName(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(Page.empty());
+
+        Page<Anime> animePage = animeController.findByName("anime", null).getBody();
+
+        Assertions.assertThat(animePage).isNotNull();
+        Assertions.assertThat(animePage.toList()).isEmpty();
     }
 
 }
