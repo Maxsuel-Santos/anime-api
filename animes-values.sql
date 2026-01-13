@@ -11,6 +11,11 @@ TRUNCATE TABLE animes RESTART IDENTITY;
 SELECT * FROM animes;
 
 -- ----------------------------------------------
+-- Visualização dos usuários cadastrados 
+-- ----------------------------------------------
+SELECT * FROM users;
+
+-- ----------------------------------------------
 -- Inserção de dados na tabela "animes"
 -- ----------------------------------------------
 INSERT INTO animes (name) VALUES ('Naruto Shippuden');
