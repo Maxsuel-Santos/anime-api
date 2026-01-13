@@ -1,6 +1,8 @@
 package com.github.maxsuel.anime_api.domain;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Data
 public class User implements UserDetails {
 
     @Id
@@ -27,9 +30,4 @@ public class User implements UserDetails {
     @Override public boolean isCredentialsNonExpired() { return true; }
     @Override public boolean isEnabled() { return true; }
 
-    public String getUsername() { return username; }
-    public String getPassword() { return password; }
-
-    public void setUsername(String u) { this.username = u; }
-    public void setPassword(String p) { this.password = p; }
 }
