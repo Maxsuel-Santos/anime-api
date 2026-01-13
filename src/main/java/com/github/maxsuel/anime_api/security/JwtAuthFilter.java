@@ -30,7 +30,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        // 🔥 IGNORA rotas públicas
         if (path.startsWith("/auth")) {
             chain.doFilter(request, response);
             return;
