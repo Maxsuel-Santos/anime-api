@@ -16,15 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.github.maxsuel.anime_api.controller.AnimeController;
 import com.github.maxsuel.anime_api.domain.Anime;
 import com.github.maxsuel.anime_api.repository.AnimeRepository;
-import com.github.maxsuel.anime_api.requests.AnimePostRequestBody;
-import com.github.maxsuel.anime_api.requests.AnimePutRequestBody;
 import com.github.maxsuel.anime_api.util.AnimeCreator;
 import com.github.maxsuel.anime_api.util.AnimePostRequestBodyCreator;
 import com.github.maxsuel.anime_api.util.AnimePutRequestBodyCreator;

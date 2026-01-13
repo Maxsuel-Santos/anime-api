@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 
 import com.github.maxsuel.anime_api.domain.Anime;
 import com.github.maxsuel.anime_api.requests.AnimePostRequestBody;
@@ -26,7 +25,6 @@ import com.github.maxsuel.anime_api.util.AnimePostRequestBodyCreator;
 import com.github.maxsuel.anime_api.util.AnimePutRequestBodyCreator;
 import com.github.maxsuel.anime_api.util.DateUtil;
 
-import io.micrometer.core.ipc.http.HttpSender.Response;
 
 @ExtendWith(MockitoExtension.class)
 class AnimeControllerTest {
