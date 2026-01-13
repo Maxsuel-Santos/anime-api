@@ -38,3 +38,33 @@ INSERT INTO animes (name) VALUES ('Neon Genesis Evangelion');
 INSERT INTO animes (name) VALUES ('Steins; Gate');
 INSERT INTO animes (name) VALUES ('Code Geass: Lelouch of the Rebellion');
 INSERT INTO animes (name) VALUES ('Gintama');
+
+
+-- ----------------------------------------------
+-- Resetar a tabela de usuários e inserir novos usuários
+-- ----------------------------------------------
+DELETE FROM users;
+
+-- ----------------------------------------------
+-- Inserção de usuário ADMIN na tabela "users"
+-- ADMIN
+-- ----------------------------------------------
+INSERT INTO users (id, username, password, role)
+VALUES (
+	1,
+    'admin',
+    '$2a$10$O9N7n7EjxX4r6Z1Y6cZ9NOBbP9C2oJv2L0Q5A0Vx0dT5W2m8Zy1gC', -- Senha com Hash: 123
+    'ADMIN'
+);
+
+-- ----------------------------------------------
+-- Inserção de usuário USER na tabela "users"
+-- USER
+-- ----------------------------------------------
+INSERT INTO users (id, username, password, role)
+VALUES (
+	2,
+    'joao',
+    '$2a$10$O9N7n7EjxX4r6Z1Y6cZ9NOBbP9C2oJv2L0Q5A0Vx0dT5W2m8Zy1gC', -- Senha com Hash: 123
+    'USER'
+);
